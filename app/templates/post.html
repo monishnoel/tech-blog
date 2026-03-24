@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} - Tech Blog{% endblock %}
+
+{% block content %}
+<article class="post-detail">
+    <div class="post-header">
+        <h1>{{ post.title }}</h1>
+        <div class="post-meta">
+            <span class="author">By {{ post.author_name }}</span>
+            <span class="date">{{ post.created_at.strftime('%B %d, %Y') }}</span>
+            <span class="category">{{ post.category }}</span>
+            <span class="views">👁️ {{ post.view_count }} views</span>
+        </div>
+    </div>
+
+    <div class="post-content">
+        {{ post.get_html_content()|safe }}
+    </div>
+
+    <!-- Edit/Delete Buttons -->
+    <div class="post-actions">
+        <a href="{{ url_for('main.edit_post', slug=post.slug) }}" class="btn btn-primary">Edit Post</a>
+    </div>
+
+    <!-- Comments Section -->
+    <section class="comments-section">
+        <h3>Comments ({{ comments|length }})</h3>
+
+        <form id="comment-form" class="comment-form">
+            <div class="form-group">
+                <label for="comment-author">Your Name</label>
+                <input type="text" id="comment-author" name="comment_author" placeholder="Your name" maxlength="100" required>
+            </div>
+            <div class="form-group">
+                <label for="comment-content">Your Comment</label>
+                <textarea id="comment-content" name="comment_content" placeholder="Share your thoughts..." rows="4" maxlength="1000" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Post Comment</button>
+        </form>
+
+        <div class="comments-list">
+            {% if comments %}
+                {% for comment in comments %}
+                    <div class="comment">
+                        <div class="comment-header">
+                            <strong>{{ comment.author_name }}</strong>
+                            <span class="comment-date">{{ comment.created_at.strftime('%B %d, %Y') }}</span>
+                        </div>
+                        <p class="comment-content">{{ comment.content }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-comments">No comments yet. Be the first to comment!</p>
+            {% endif %}
+        </div>
+    </section>
+</article>
+
+<nav class="post-nav">
+    <a href="{{ url_for('main.index') }}" class="btn btn-secondary">← Back to Posts</a>
+</nav>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('comment-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const author_name = document.getElementById('comment-author').value;
+    const content = document.getElementById('comment-content').value;
+    
+    if (!author_name.trim() || !content.trim()) {
+        alert('Please fill in all fields');
+        return;
+    }
+
+    fetch('{{ url_for("api.add_comment") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+            post_id: {{ post.id }},
+            author_name: author_name,
+            content: content 
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Thank you! Your comment has been posted.');
+            document.getElementById('comment-author').value = '';
+            document.getElementById('comment-content').value = '';
+            location.reload();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to submit comment');
+    });
+});
+</script>
+{% endblock %}

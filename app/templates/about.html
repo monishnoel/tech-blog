@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}About - Tech Blog{% endblock %}
+
+{% block content %}
+<section class="about-page">
+    <h1>About Tech Blog & CMS</h1>
+    
+    <div class="about-content">
+        <p>
+            Welcome to Tech Blog & CMS, a modern platform for sharing knowledge, insights, and stories about technology, programming, and web development.
+        </p>
+
+        <h2>Meet the Creator</h2>
+        <div class="author-profile">
+            <div class="author-info">
+                <h3>Monish Noel</h3>
+                <div class="author-details">
+                    <p><strong>University:</strong> Kristu Jayanti University</p>
+                    <p><strong>Course:</strong> BCA (Bachelor of Computer Applications)</p>
+                    <p><strong>Year:</strong> First Year</p>
+                </div>
+                <p class="author-bio">
+                    I'm a passionate developer and creative professional with a strong interest in both technology and multimedia. 
+                    I specialize in videography and photography, with expertise in editing both videos and photos. 
+                    I'm also a developer with practical knowledge in multiple programming languages and technologies.
+                </p>
+            </div>
+
+            <div class="skills-section">
+                <h3>Skills & Expertise</h3>
+                
+                <div class="skill-category">
+                    <h4>🎬 Multimedia & Creative</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Videography</span>
+                        <span class="skill-tag">Photography</span>
+                        <span class="skill-tag">Video Editing</span>
+                        <span class="skill-tag">Photo Editing</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h4>💻 Programming Languages</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag">C++</span>
+                        <span class="skill-tag">C</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">HTML</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h4>🗄️ Databases</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag">MongoDB</span>
+                        <span class="skill-tag">SQL</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2>About This Blog</h2>
+        <p>
+            This blog is built using modern web technologies and serves as a platform for sharing knowledge, insights, and stories about technology, programming, and web development.
+        </p>
+        <ul>
+            <li>Web Development & Frameworks</li>
+            <li>Backend Technologies</li>
+            <li>Database Design</li>
+            <li>DevOps & Deployment</li>
+            <li>Best Practices & Tips</li>
+        </ul>
+
+        <h2>Tech Stack</h2>
+        <ul>
+            <li><strong>Backend:</strong> Python & Flask</li>
+            <li><strong>Database:</strong> MySQL</li>
+            <li><strong>Frontend:</strong> HTML, CSS, JavaScript</li>
+            <li><strong>Deployment:</strong> Render with CI/CD Pipeline</li>
+            <li><strong>Version Control:</strong> GitHub</li>
+        </ul>
+
+        <h2>Blog Statistics</h2>
+
+        <div class="stats">
+            <div class="stat-card">
+                <strong id="stat-posts">0</strong>
+                <p>Blog Posts</p>
+            </div>
+            <div class="stat-card">
+                <strong id="stat-comments">0</strong>
+                <p>Comments</p>
+            </div>
+            <div class="stat-card">
+                <strong id="stat-views">0</strong>
+                <p>Total Views</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.author-profile {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 2rem;
+    border-radius: 10px;
+    margin: 2rem 0;
+}
+
+.author-info {
+    margin-bottom: 2rem;
+}
+
+.author-info h3 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.author-details {
+    background: white;
+    padding: 1rem;
+    border-radius: 5px;
+    margin: 1rem 0;
+}
+
+.author-details p {
+    margin: 0.5rem 0;
+    color: #555;
+}
+
+.author-bio {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #333;
+    margin-top: 1rem;
+}
+
+.skills-section {
+    margin-top: 2rem;
+}
+
+.skills-section h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.skill-category {
+    margin-bottom: 1.5rem;
+}
+
+.skill-category h4 {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 0.8rem;
+}
+
+.skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.skill-tag {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.skill-tag:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+@media (max-width: 768px) {
+    .author-profile {
+        padding: 1.5rem;
+    }
+    
+    .author-info h3 {
+        font-size: 1.5rem;
+    }
+    
+    .skill-tags {
+        gap: 0.4rem;
+    }
+    
+    .skill-tag {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+    }
+}
+</style>
+{% endblock %}

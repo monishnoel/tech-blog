@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Comments - Admin{% endblock %}
+
+{% block content %}
+<div class="admin-layout">
+    <aside class="admin-sidebar">
+        <h3>Admin Panel</h3>
+        <ul class="admin-menu">
+            <li><a href="{{ url_for('admin.dashboard') }}">Dashboard</a></li>
+            <li><a href="{{ url_for('admin.manage_posts') }}">Manage Posts</a></li>
+            <li><a href="{{ url_for('admin.manage_comments') }}" class="active">Manage Comments</a></li>
+        </ul>
+    </aside>
+
+    <main class="admin-content">
+        <h1>Manage Comments</h1>
+
+        <div class="comments-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Author</th>
+                        <th>Content</th>
+                        <th>Post</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for comment in comments.items %}
+                    <tr>
+                        <td>{{ comment.author.username }}</td>
+                        <td>{{ comment.content[:50] }}...</td>
+                        <td><a href="{{ url_for('main.view_post', slug=comment.post.slug) }}">{{ comment.post.title[:30] }}</a></td>
+                        <td>
+                            {% if comment.is_approved %}
+                                <span class="badge badge-success">Approved</span>
+                            {% else %}
+                                <span class="badge badge-warning">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ comment.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            {% if not comment.is_approved %}
+                            <button class="btn btn-sm btn-success" onclick="approveComment({{ comment.id }})">Approve</button>
+                            {% endif %}
+                            <button class="btn btn-sm btn-danger" onclick="deleteComment({{ comment.id }})">Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            {% if comments.has_prev %}
+                <a href="{{ url_for('admin.manage_comments', page=comments.prev_num) }}" class="btn-page">← Previous</a>
+            {% endif %}
+
+            {% for page_num in comments.iter_pages() %}
+                {% if page_num %}
+                    {% if page_num == comments.page %}
+                        <span class="page-current">{{ page_num }}</span>
+                    {% else %}
+                        <a href="{{ url_for('admin.manage_comments', page=page_num) }}" class="btn-page">{{ page_num }}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+            {% if comments.has_next %}
+                <a href="{{ url_for('admin.manage_comments', page=comments.next_num) }}" class="btn-page">Next →</a>
+            {% endif %}
+        </div>
+    </main>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function approveComment(commentId) {
+        fetch(`{{ url_for('admin.approve_comment', comment_id=0) }}`.replace('0', commentId), {
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            }
+        });
+    }
+
+    function deleteComment(commentId) {
+        if (confirm('Are you sure you want to delete this comment?')) {
+            fetch(`{{ url_for('admin.delete_comment', comment_id=0) }}`.replace('0', commentId), {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                }
+            });
+        }
+    }
+</script>
+{% endblock %}

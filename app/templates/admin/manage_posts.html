@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Posts - Admin{% endblock %}
+
+{% block content %}
+<div class="admin-layout">
+    <aside class="admin-sidebar">
+        <h3>Admin Panel</h3>
+        <ul class="admin-menu">
+            <li><a href="{{ url_for('admin.dashboard') }}">Dashboard</a></li>
+            <li><a href="{{ url_for('admin.manage_posts') }}" class="active">Manage Posts</a></li>
+            <li><a href="{{ url_for('admin.manage_comments') }}">Manage Comments</a></li>
+        </ul>
+    </aside>
+
+    <main class="admin-content">
+        <h1>Manage Posts</h1>
+        
+        <a href="{{ url_for('admin.new_post') }}" class="btn btn-primary">+ Create New Post</a>
+
+        <div class="posts-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Views</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in posts.items %}
+                    <tr>
+                        <td>{{ post.title }}</td>
+                        <td>{{ post.author.username }}</td>
+                        <td>{{ post.category }}</td>
+                        <td>
+                            {% if post.is_published %}
+                                <span class="badge badge-success">Published</span>
+                            {% else %}
+                                <span class="badge badge-warning">Draft</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ post.view_count }}</td>
+                        <td>{{ post.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            <a href="{{ url_for('admin.edit_post', post_id=post.id) }}" class="btn btn-sm btn-info">Edit</a>
+                            <form action="{{ url_for('admin.delete_post', post_id=post.id) }}" method="POST" style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            {% if posts.has_prev %}
+                <a href="{{ url_for('admin.manage_posts', page=posts.prev_num) }}" class="btn-page">← Previous</a>
+            {% endif %}
+
+            {% for page_num in posts.iter_pages() %}
+                {% if page_num %}
+                    {% if page_num == posts.page %}
+                        <span class="page-current">{{ page_num }}</span>
+                    {% else %}
+                        <a href="{{ url_for('admin.manage_posts', page=page_num) }}" class="btn-page">{{ page_num }}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+            {% if posts.has_next %}
+                <a href="{{ url_for('admin.manage_posts', page=posts.next_num) }}" class="btn-page">Next →</a>
+            {% endif %}
+        </div>
+    </main>
+</div>
+{% endblock %}

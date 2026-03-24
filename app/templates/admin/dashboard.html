@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Tech Blog{% endblock %}
+
+{% block content %}
+<div class="admin-layout">
+    <aside class="admin-sidebar">
+        <h3>Admin Panel</h3>
+        <ul class="admin-menu">
+            <li><a href="{{ url_for('admin.dashboard') }}" class="active">Dashboard</a></li>
+            <li><a href="{{ url_for('admin.manage_posts') }}">Manage Posts</a></li>
+            <li><a href="{{ url_for('admin.manage_comments') }}">Manage Comments</a></li>
+        </ul>
+    </aside>
+
+    <main class="admin-content">
+        <h1>Admin Dashboard</h1>
+        
+        <div class="stats-grid">
+            <div class="stat-box">
+                <h3>{{ stats.total_posts }}</h3>
+                <p>Total Posts</p>
+            </div>
+            <div class="stat-box">
+                <h3>{{ stats.published_posts }}</h3>
+                <p>Published Posts</p>
+            </div>
+            <div class="stat-box">
+                <h3>{{ stats.total_comments }}</h3>
+                <p>Total Comments</p>
+            </div>
+            <div class="stat-box">
+                <h3>{{ stats.total_users }}</h3>
+                <p>Total Users</p>
+            </div>
+        </div>
+
+        <section class="admin-section">
+            <h2>Quick Actions</h2>
+            <a href="{{ url_for('admin.new_post') }}" class="btn btn-primary">Create New Post</a>
+            <a href="{{ url_for('admin.manage_posts') }}" class="btn btn-secondary">View All Posts</a>
+        </section>
+    </main>
+</div>
+{% endblock %}

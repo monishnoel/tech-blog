@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: tech-blog-cms
+    env: docker
+    repo: https://github.com/YOUR_USERNAME/tech-blog-cms
+    branch: main
+    dockerfilePath: ./Dockerfile
+
+envVars:
+  - key: FLASK_ENV
+    value: production
+  - key: SECRET_KEY
+    generateValue: true
+  - key: DB_HOST
+    value: your-mysql-host
+  - key: DB_USER
+    value: blog_user
+  - key: DB_PASSWORD
+    generateValue: true
+  - key: DB_NAME
+    value: tech_blog_db

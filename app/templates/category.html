@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}{{ category }} - Tech Blog{% endblock %}
+
+{% block content %}
+<section class="category-page">
+    <h1>Category: {{ category }}</h1>
+    
+    {% if posts.items %}
+        <div class="posts-grid">
+            {% for post in posts.items %}
+                <article class="post-card">
+                    <div class="post-header">
+                        <h3><a href="{{ url_for('main.view_post', slug=post.slug) }}">{{ post.title }}</a></h3>
+                        <span class="post-category">{{ post.category }}</span>
+                    </div>
+                    <p class="post-excerpt">{{ post.get_summary() }}</p>
+                    <div class="post-meta">
+                        <span class="author">By {{ post.author_name }}</span>
+                        <span class="date">{{ post.created_at.strftime('%B %d, %Y') }}</span>
+                    </div>
+                    <a href="{{ url_for('main.view_post', slug=post.slug) }}" class="read-more">Read More →</a>
+                </article>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            {% if posts.has_prev %}
+                <a href="{{ url_for('main.category', category=category, page=posts.prev_num) }}" class="btn-page">← Previous</a>
+            {% endif %}
+
+            {% for page_num in posts.iter_pages() %}
+                {% if page_num %}
+                    {% if page_num == posts.page %}
+                        <span class="page-current">{{ page_num }}</span>
+                    {% else %}
+                        <a href="{{ url_for('main.category', category=category, page=page_num) }}" class="btn-page">{{ page_num }}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+            {% if posts.has_next %}
+                <a href="{{ url_for('main.category', category=category, page=posts.next_num) }}" class="btn-page">Next →</a>
+            {% endif %}
+        </div>
+    {% else %}
+        <p class="no-posts">No posts in this category yet.</p>
+    {% endif %}
+</section>
+{% endblock %}
