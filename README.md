@@ -6,8 +6,6 @@ A production-ready **Personal Tech Blog & CMS** built with Python Flask, MySQL, 
 
 ### 🔧 Core Features
 - **Blog Engine**: Create, edit, and publish blog posts with Markdown support
-- **CMS Dashboard**: Admin panel for managing posts and comments
-- **User Management**: Registration, authentication, and role-based access
 - **Comment System**: Readers can leave comments (moderation required)
 - **Search Functionality**: Full-text search across blog posts
 - **Categories & Tags**: Organize posts with categories and tags
