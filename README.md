@@ -105,36 +105,53 @@ pip install -r requirements.txt
 ```
 
 #### 4. Configure Environment Variables
-```bash
-# Copy the example file
-cp .env.example .env
 
-# Edit .env with your settings
-# Important variables:
-# - SECRET_KEY: Generate a secure key
-# - DB_HOST: Your MySQL host
-# - DB_USER: MySQL user
-# - DB_PASSWORD: MySQL password
-# - DB_NAME: Database name
-# - ADMIN_USERNAME: Admin username
-# - ADMIN_PASSWORD: Admin password
+**Option A: Using Railway (Recommended for Production)**
+1. Create a MySQL database on [Railway.app](https://railway.app)
+2. Copy your database credentials from the Railway dashboard
+3. Create `.env` file:
+```bash
+DB_HOST=your-railway-host.proxy.rlwy.net
+DB_USER=root
+DB_PASSWORD=your-password
+DB_NAME=railway
+DB_PORT=your-port
+SECRET_KEY=generate-a-secure-random-key
 ```
 
-#### 5. Create Database
+**Option B: Using Local MySQL**
 ```bash
-# Connect to MySQL and create database
+# Create .env file
+cp .env.example .env
+
+# Edit with your local MySQL settings:
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your-password
+DB_NAME=tech_blog_db
+DB_PORT=3306
+SECRET_KEY=generate-a-secure-random-key
+```
+
+#### 5. Create & Initialize Database
+
+**If using Railway (database already created):**
+```bash
+python seed_db.py  # Populate with sample data (optional)
+```
+
+**If using local MySQL:**
+```bash
+# Create database
 mysql -u root -p
 > CREATE DATABASE tech_blog_db;
 > EXIT;
+
+# Initialize tables
+python seed_db.py
 ```
 
-#### 6. Initialize Database
-```bash
-python run.py init-db
-python run.py seed-db  # Optional: Add sample data
-```
-
-#### 7. Run Application
+#### 6. Run Application
 ```bash
 python run.py
 ```
@@ -142,8 +159,8 @@ python run.py
 Visit `http://localhost:5000` in your browser.
 
 ### Default Credentials (After Setup)
-- **Username**: `admin`
-- **Password**: (Set in .env as `ADMIN_PASSWORD`)
+- **Username**: `admin` (set in .env as `ADMIN_USERNAME`)
+- **Password**: (set in .env as `ADMIN_PASSWORD`)
 - **Admin Dashboard**: http://localhost:5000/admin
 
 ---
@@ -232,33 +249,51 @@ git remote add origin https://github.com/YOUR_USERNAME/tech-blog-cms.git
 git push -u origin main
 ```
 
-### Step 2: Create Render Account
+### Step 2: Set Up MySQL Database
+
+**Option A: Use Railway (Recommended)**
+1. Go to [https://railway.app](https://railway.app)
+2. Create a new MySQL plugin
+3. Copy connection details from Railway dashboard
+4. Note: `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, `DB_PORT`
+
+**Option B: Use Other Services**
+- AWS RDS, PlanetScale, Aiven, or another managed MySQL service
+- Ensure public network access is enabled for cloud deployment
+
+### Step 3: Create Render Service
 1. Go to [https://render.com](https://render.com)
 2. Sign up with GitHub account
 3. Create a new web service
+4. Connect your GitHub repository
 
-### Step 3: Configure Render Service
+### Step 4: Configure Render Service
 1. **Name**: tech-blog-cms
 2. **Repository**: Select your GitHub repository
 3. **Branch**: main
 4. **Docker**: Enable Docker
-5. **Environment Variables**:
+5. **Environment Variables** (add all from your `.env`):
    - `FLASK_ENV=production`
-   - `SECRET_KEY=<generate-secure-key>`
-   - `DB_HOST=<your-mysql-host>`
-   - `DB_USER=blog_user`
-   - `DB_PASSWORD=<secure-password>`
-   - `DB_NAME=tech_blog_db`
-
-### Step 4: Create MySQL Database
-- Use a managed MySQL service (e.g., AWS RDS, PlanetScale, Aiven)
-- Or set up MySQL on a separate instance
-- Configure connection details in Render environment variables
+   - `SECRET_KEY=<your-secure-key>`
+   - `DB_HOST=<railway-or-db-host>`
+   - `DB_USER=<db-user>`
+   - `DB_PASSWORD=<db-password>`
+   - `DB_NAME=<database-name>`
+   - `DB_PORT=<port>`
+   - `ADMIN_USERNAME=admin`
+   - `ADMIN_PASSWORD=<secure-password>`
 
 ### Step 5: Deploy
 1. Click **Deploy** on Render
 2. Wait for build and deployment to complete
 3. Your app will be live at `https://your-service-name.onrender.com`
+
+### Post-Deployment
+1. Seed database with initial data (if not auto-populated):
+   ```bash
+   # Optionally run via SSH or manually create admin user in MySQL
+   ```
+2. Login with credentials from `ADMIN_USERNAME` and `ADMIN_PASSWORD`
 
 ---
 
